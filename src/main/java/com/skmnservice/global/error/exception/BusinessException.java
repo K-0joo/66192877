@@ -2,13 +2,15 @@ package com.skmnservice.global.error.exception;
 
 import com.skmnservice.global.error.ErrorCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class BusinessException extends RuntimeException{
-    private ErrorCode errorCode;
+    private final ErrorCode errorCode;
+    private final String message;
 
     public BusinessException(ErrorCode errorCode){
-        super(errorCode.getMessage());
-        this.errorCode = errorCode;
+        this(errorCode, errorCode.getMessage());
     }
 }
