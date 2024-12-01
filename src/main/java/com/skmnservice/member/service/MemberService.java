@@ -5,6 +5,8 @@ import com.skmnservice.global.error.exception.InvalidInputException;
 import com.skmnservice.global.error.exception.NotFoundException;
 import com.skmnservice.member.dto.LoginRequest;
 import com.skmnservice.member.dto.LoginResponse;
+import com.skmnservice.member.entity.Member;
+import com.skmnservice.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
     public LoginResponse login(LoginRequest requestDto){
@@ -27,5 +29,6 @@ public class MemberService {
             throw new InvalidInputException(ErrorCode.ACCOUNT_MISMATCH);
         }
 
+        return new LoginResponse(member.getMemberId(), member.getId());
     }
 }
