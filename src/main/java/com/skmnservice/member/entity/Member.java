@@ -1,11 +1,13 @@
 package com.skmnservice.member.entity;
 
+import com.skmnservice.board.entity.Board;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -27,8 +29,14 @@ public class Member implements UserDetails { // UserDetails를 상속 받아 인
     @Column(name = "password", length = 200)
     private String password;
 
+    @Column(name = "reg_time")
+    private LocalDateTime regTime;
+
     @Column(name = "name", length = 50)
     private String name;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Board> boards; // 회원이 작성한 게시글 목록
 
     @Builder
     public Member(UUID memberId, String id, String password, String name){

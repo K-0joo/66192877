@@ -24,9 +24,10 @@ public class WebSecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/member/login", "/board").permitAll()
+                        .requestMatchers("/api/member/login", "/board", "/h2-console/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .anyRequest().authenticated())
+                .headers(headers -> headers.frameOptions().disable())
                 .formLogin(form -> form
                         .loginPage("/api/member/login") // 로그인 페이지 경로
                         .defaultSuccessUrl("/main")) // 로그인 완료 이후 이동할 경로
