@@ -24,7 +24,6 @@ public class LoginApiController {
     public ResponseEntity<ResponseDto> login(@RequestBody LoginRequest requestDto){
         // 사용자 검증 로직 추가
         LoginResponse responseDto = memberService.login(requestDto);
-        System.out.println(requestDto.toString());
         return ResponseEntity.ok(ResponseDto.of(ResponseCode.LOGIN_SUCCESS, responseDto));
     }
 
