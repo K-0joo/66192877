@@ -35,15 +35,13 @@ public class Member implements UserDetails { // UserDetails를 상속 받아 인
     @Column(name = "name", length = 50)
     private String name;
 
-//    @OneToMany(mappedBy = "boards", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Board> boards; // 회원이 작성한 게시글 목록
-
     @Builder
-    public Member(UUID memberId, String id, String password, String name){
+    public Member(UUID memberId, String id, String password, String name, LocalDateTime regTime){
         this.memberId = memberId;
         this.id = id;
         this.password = password;
         this.name = name;
+        this.regTime = regTime;
     }
 
     // 권한 반환

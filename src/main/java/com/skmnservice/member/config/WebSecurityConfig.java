@@ -24,13 +24,12 @@ public class WebSecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/member/**", "/board", "/h2-console/**").permitAll()
+                        .requestMatchers("/", "/api/member/**", "/board", "/h2-console/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .anyRequest().authenticated())
                 .headers(headers -> headers.frameOptions().disable())
-                .formLogin(form -> form
-                        .loginPage("/api/member/login") // 로그인 페이지 경로
-                        .defaultSuccessUrl("/main")) // 로그인 완료 이후 이동할 경로
+                .formLogin(AbstractHttpConfigurer::disable) // HTML 폼 로그인 비활성화
+                .httpBasic(AbstractHttpConfigurer::disable) // HTTP Basic 비활성화
                 .logout(logout -> logout
                         .logoutSuccessUrl("/api/member/login")
                         .invalidateHttpSession(true)) // 로그아웃 이후 세션 전체 삭제 여부
