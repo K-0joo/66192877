@@ -10,6 +10,9 @@ import com.skmnservice.member.entity.Member;
 import com.skmnservice.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -41,4 +44,11 @@ public class BoardService {
         // 응답 DTO 생성
         return new BoardResponse(board.getTitle(), board.getContext(), author.getId(), board.getFiles().isEmpty());
     }
+
+    @Transactional
+    public Page<Board> getBoardList(int page, int size, String keyword){
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return boardRepository.findByTitleOrAuthorId(keyword, keyword, pageable);
+    }
+
 }
