@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Table(name = "member")
+@Table(name = "board")
 @Getter
 @Setter
 @Entity
@@ -40,6 +40,6 @@ public class Board {
     @Column(name = "board_created_time", nullable = false)
     private LocalDateTime boardCreatedTime;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<File> files; // 첨부 파일 목록
+//    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<File> files; // 첨부 파일 목록
 }
