@@ -21,7 +21,7 @@ public enum ErrorCode {
     TIME_FORMAT_INVALID(400, "G004", "날짜, 시간 타입 형식이 유효하지 않습니다."),
 
     // User
-    USER_NOT_FOUND(400, "U001", "존재하지 않는 유저입니다."),
+    ACCOUNT_NOT_FOUND(400, "U001", "존재하지 않는 아이디입니다."),
     ACCOUNT_ALEREADY_EXIST(400, "U002", "이미 존재하는 사용자 계정입니다."),
     AUTHENTICATION_FAIL(401, "U003", "로그인이 필요한 화면입니다"),
     AUTHORITY_INVALID(403, "U004", "권한이 없습니다."),
