@@ -6,6 +6,8 @@ import com.skmnservice.board.entity.Board;
 import com.skmnservice.board.service.BoardService;
 import com.skmnservice.global.response.ResponseCode;
 import com.skmnservice.global.response.ResponseDto;
+import com.skmnservice.member.dto.LoginResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +32,19 @@ public class BoardAPIController {
     public String boardList(@RequestParam(defaultValue = "0") int page,
                             @RequestParam(defaultValue = "10") int size,
                             @RequestParam(defaultValue = "") String keyword,
+                            HttpSession session,
                             Model model){
+        LoginResponse member = (LoginResponse) session.getAttribute("member");
+
+        if(member == null){
+            return "redirect:/api/member/login";
+        }
+
+        model.addAttribute("member", member);
         Page<Board> boardPage = boardService.getBoardList(page, size, keyword);
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("keyword", keyword);
-        return "board/list";
+        return "html/board";
     }
 }

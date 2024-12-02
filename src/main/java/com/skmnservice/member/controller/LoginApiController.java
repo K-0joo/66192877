@@ -5,6 +5,7 @@ import com.skmnservice.global.response.ResponseDto;
 import com.skmnservice.member.dto.LoginRequest;
 import com.skmnservice.member.dto.LoginResponse;
 import com.skmnservice.member.service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,13 +23,24 @@ public class LoginApiController {
     @PostMapping("/login")
     @ResponseBody
     public ResponseEntity<ResponseDto> login(@RequestBody LoginRequest requestDto){
+        System.out.println("Received ID: " + requestDto.id());
+        System.out.println("Received Password: " + requestDto.password());
+
+
         // 사용자 검증 로직 추가
         LoginResponse responseDto = memberService.login(requestDto);
         return ResponseEntity.ok(ResponseDto.of(ResponseCode.LOGIN_SUCCESS, responseDto));
     }
 
     @GetMapping("/login")
-    public String login(Model model){
+    public String loginPage(@RequestParam(value = "error", required = false) String error, Model model) {
+        model.addAttribute("error", error != null);
         return "html/login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // 세션 무효화
+        return "redirect:/api/member/login";
     }
 }

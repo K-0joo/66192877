@@ -1,6 +1,8 @@
 package com.skmnservice.member.config;
 
 import com.skmnservice.member.service.MemberDetailService;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,17 +26,29 @@ public class WebSecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/api/member/**", "/board", "/h2-console/**").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+                        .requestMatchers("/", "/api/member/**", "/api/board", "/h2-console/**").permitAll()
+                        .requestMatchers("/css/**", "/javascript/**", "/images/**" ).permitAll()
                         .anyRequest().authenticated())
-                .headers(headers -> headers.frameOptions().disable())
-                .formLogin(AbstractHttpConfigurer::disable) // HTML 폼 로그인 비활성화
+                .formLogin(form -> form
+                        .usernameParameter("id") // 기본 username을 id로 변경
+                        .passwordParameter("password")
+                        .loginPage("/api/member/login") // 로그인 페이지 설정
+                        .failureHandler((request, response, exception) -> {
+                            response.setContentType("application/json");
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("{\"message\": \"로그인 실패\"}");
+                        })
+                        .defaultSuccessUrl("/api/board", true) // 로그인 성공 시 이동할 페이지
+                        .permitAll())
                 .httpBasic(AbstractHttpConfigurer::disable) // HTTP Basic 비활성화
                 .logout(logout -> logout
+                        .logoutUrl("/api/member/logout")
                         .logoutSuccessUrl("/api/member/login")
                         .invalidateHttpSession(true)) // 로그아웃 이후 세션 전체 삭제 여부
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)); // 세션이 필요한 경우 생성
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // 세션이 필요한 경우 생성
+            .headers(headers -> headers.frameOptions().disable());
         return http.build();
     }
 
