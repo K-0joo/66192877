@@ -2,6 +2,7 @@ package com.skmnservice.board.controller;
 
 import com.skmnservice.board.dto.BoardRequest;
 import com.skmnservice.board.dto.BoardResponse;
+import com.skmnservice.board.service.BoardService;
 import com.skmnservice.global.response.ResponseCode;
 import com.skmnservice.global.response.ResponseDto;
 import lombok.RequiredArgsConstructor;

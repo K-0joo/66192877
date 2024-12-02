@@ -3,6 +3,7 @@ package com.skmnservice.board.service;
 import com.skmnservice.board.dto.BoardRequest;
 import com.skmnservice.board.dto.BoardResponse;
 import com.skmnservice.board.entity.Board;
+import com.skmnservice.board.repository.BoardRepository;
 import com.skmnservice.global.error.ErrorCode;
 import com.skmnservice.global.error.exception.NotFoundException;
 import com.skmnservice.member.entity.Member;
