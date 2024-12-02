@@ -42,7 +42,7 @@ public class BoardService {
         board = boardRepository.save(board);
 
         // 응답 DTO 생성
-        return new BoardResponse(board.getTitle(), board.getContext(), author.getId(), board.getFiles().isEmpty());
+        return new BoardResponse(board.getTitle(), board.getContext(), author.getId(), board.isFilePrecence());
     }
 
     @Transactional

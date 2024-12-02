@@ -35,8 +35,8 @@ public class Member implements UserDetails { // UserDetails를 상속 받아 인
     @Column(name = "name", length = 50)
     private String name;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Board> boards; // 회원이 작성한 게시글 목록
+//    @OneToMany(mappedBy = "boards", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Board> boards; // 회원이 작성한 게시글 목록
 
     @Builder
     public Member(UUID memberId, String id, String password, String name){

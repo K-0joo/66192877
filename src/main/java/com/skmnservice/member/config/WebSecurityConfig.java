@@ -24,7 +24,7 @@ public class WebSecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/member/login", "/board", "/h2-console/**").permitAll()
+                        .requestMatchers("/api/member/**", "/board", "/h2-console/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .anyRequest().authenticated())
                 .headers(headers -> headers.frameOptions().disable())

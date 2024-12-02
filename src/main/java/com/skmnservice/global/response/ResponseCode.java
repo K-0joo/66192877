@@ -14,6 +14,8 @@ import lombok.Getter;
 public enum ResponseCode {
     // User
     LOGIN_SUCCESS(200, "U001", "로그인에 성공하였습니다."),
+    REGISTER_SUCCESS(200, "U002", "회원가입에 성공하였습니다."),
+    REGISTER_FAIL(200, "U003", "회원가입에 실패하였습니다."),
     LOGIN_FAIL(200, "U004", "로그인에 실패하였습니다."),
 
     // Board
