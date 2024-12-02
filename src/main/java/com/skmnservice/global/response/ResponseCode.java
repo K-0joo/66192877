@@ -15,6 +15,10 @@ public enum ResponseCode {
     // User
     LOGIN_SUCCESS(200, "U001", "로그인에 성공하였습니다."),
     LOGIN_FAIL(200, "U004", "로그인에 실패하였습니다."),
+
+    // Board
+    BOARD_SUCCESS(200, "B001", "게시판 작성에 성공하였습니다."),
+    BOARD_FAIL(200, "B002", "게시판 작성에 실패하였습니다."),
     ;
 
     private final int status;
