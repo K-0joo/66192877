@@ -47,7 +47,7 @@ public class BoardService {
 
     @Transactional
     public Page<Board> getBoardList(int page, int size, String keyword){
-        PageRequest pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("boardCreatedTime").descending());
         return boardRepository.findByTitleOrAuthorId(keyword, keyword, pageable);
     }
 

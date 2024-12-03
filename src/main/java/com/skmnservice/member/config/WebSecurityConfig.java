@@ -28,12 +28,13 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                         .requestMatchers("/", "/api/member/**", "/api/board", "/h2-console/**").permitAll()
-                        .requestMatchers("/css/**", "/javascript/**", "/images/**" ).permitAll()
+                        .requestMatchers("/css/**", "/javascript/**", "/images/**", "/favicon.ico" ).permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .usernameParameter("id") // 기본 username을 id로 변경
                         .passwordParameter("password")
                         .loginPage("/api/member/login") // 로그인 페이지 설정
+                        .loginProcessingUrl("/api/member/login") // Spring Security가 처리하는 경로
                         .failureHandler((request, response, exception) -> {
                             response.setContentType("application/json");
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

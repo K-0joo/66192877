@@ -13,8 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            console.log(`ID: ${id}, Password: ${password}`); // 디버깅용
-
             const formData = new URLSearchParams();
             formData.append("id", id);
             formData.append("password", password);
@@ -29,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
                 if (response.ok) {
-                    alert("로그인 성공!");
                     window.location.href = "/api/board";
                 } else {
                     alert("로그인 실패. 다시 시도해주세요.");
