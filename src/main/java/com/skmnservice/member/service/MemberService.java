@@ -10,6 +10,8 @@ import com.skmnservice.member.dto.RegisterRequest;
 import com.skmnservice.member.dto.RegisterResponse;
 import com.skmnservice.member.entity.Member;
 import com.skmnservice.member.repository.MemberRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final HttpServletRequest request; // HttpServletRequest 주입
 
     @Transactional
     public RegisterResponse register(RegisterRequest requestDto){
