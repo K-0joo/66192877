@@ -51,7 +51,7 @@
     <tbody>
     <tr th:each="post : ${boardPage.content}">
         <td>
-            <a th:href="@{/post/{id}(id=${post.boardId})}" style="text-decoration: underline; color: black;">
+            <a th:href="@{/api/board/{boardId}(boardId=${post.boardId})}" style="text-decoration: underline; color: black;">
                 <span th:text="${post.title}"></span>
             </a>
         </td>

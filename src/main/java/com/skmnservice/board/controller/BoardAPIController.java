@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 import java.util.UUID;
@@ -34,12 +35,13 @@ public class BoardAPIController {
     private final MemberRepository memberRepository;
 
     @PostMapping("/write")
-    @ResponseBody
-    public ResponseEntity<ResponseDto> write(@RequestParam("title") String title,
-                                             @RequestParam("context") String context) {
+    public String write(@RequestParam("title") String title,
+                        @RequestParam("context") String context,
+                        RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
-            return ResponseEntity.status(401).body(ResponseDto.of(ResponseCode.NEED_AUTHORIZED, "로그인이 필요합니다."));
+            redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
+            return "redirect:/api/member/login";
         }
 
         // Principal에서 ID 추출
@@ -53,9 +55,9 @@ public class BoardAPIController {
 
         // BoardRequest 생성 후 저장
         BoardRequest requestDto = new BoardRequest(title, memberId, context);
-        BoardResponse responseDto = boardService.write(requestDto);
+        UUID boardId = boardService.write(requestDto);
 
-        return ResponseEntity.ok(ResponseDto.of(ResponseCode.BOARD_SUCCESS, responseDto));
+        return "redirect:/api/board/" + boardId;
     }
 
     @PostMapping("/upload")
@@ -139,7 +141,9 @@ public class BoardAPIController {
 
         try {
             BoardDetailResponse board = boardService.getBoardById(boardId);
+            BoardDetailResponse boardhits = boardService.getBoardByIdWithHitIncrease(boardId);
             model.addAttribute("board", board);
+            model.addAttribute("board", boardhits);
         } catch (NotFoundException e) {
             return "error/404"; // 게시글이 없을 경우 404 페이지로 이동
         }

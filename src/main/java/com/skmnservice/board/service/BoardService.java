@@ -36,7 +36,7 @@ public class BoardService {
     private final FileRepository fileRepository;
 
     @Transactional
-    public BoardResponse write(BoardRequest requestDto){
+    public UUID write(BoardRequest requestDto){
         // 작성자 정보 조회
         Member author = memberRepository.findById(requestDto.memberId())
                 .orElseThrow(() -> new NotFoundException(ErrorCode.ACCOUNT_NOT_FOUND));
@@ -51,9 +51,7 @@ public class BoardService {
 
         // 게시글 저장
         board = boardRepository.save(board);
-
-        // 응답 DTO 생성
-        return new BoardResponse(board.getTitle(), board.getContext(), author.getId());
+        return board.getBoardId();
     }
 
     @Transactional
@@ -125,5 +123,26 @@ public class BoardService {
 
         // 게시글 저장
         boardRepository.save(board);
+    }
+
+    @Transactional
+    public BoardDetailResponse getBoardByIdWithHitIncrease(UUID boardId) {
+        // 게시글을 찾기
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.BOARD_NOT_FOUND));
+
+        // 조회수 증가
+        board.setHits(board.getHits() + 1);
+        boardRepository.save(board);
+
+        // 반환용 DTO 생성
+        return new BoardDetailResponse(
+                        board.getBoardId(),
+                        board.getTitle(),
+                        board.getContext(),
+                        board.getAuthor().getName(),
+                board.getHits(),
+                board.getBoardCreatedTime()
+                );
     }
 }
