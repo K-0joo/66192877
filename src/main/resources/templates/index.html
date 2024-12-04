@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <title>구현 문서</title>
+        <link href="/css/main.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Moebius+Korea&display=swap" rel="stylesheet" />
+    </head>
+<body><div class="v55_9">
+    <div class="v55_22"></div>
+    <div class="v55_74"></div>
+    <div class="v55_82"></div>
+    <div class="v55_96"></div>
+    <div class="v55_76"></div>
+    <div class="v55_10"></div>
+    <span class="v55_11">김영주</span>
+    <span class="v55_18">Skills</span>
+    <span class="v55_49">Prototype</span>
+    <span class="v55_54">DataBase</span>
+    <span class="v55_59">코드 설계</span>
+    <span class="v55_66">고민했던 점</span>
+    <span class="v55_68">트러블 슈팅</span><span class="v55_70">읽어주셔서
+감사 합니다.🍀</span><span class="v55_64">코드는 리팩토링하기 좋게 분리하기
+최대한 일관된 결과들로 받아볼 수 있게 하기
+프론트엔드와 백엔드의 역할을 확실하게 분리하기
+꼭 제 시간안에 완성하기</span><span class="v55_80">코드는 리팩토링하기 좋게 분리하기
+DTO, Entity, Controller, Service, Repository 분리하여 진행
+DTO에 record 사용하여 깔끔한 코드 작성
+한 Controller 내에서 JSON 형식과 Form 형식으로 받을 때 @ResponseBody로 분리
+
+최대한 일관된 결과들로 받아볼 수 있게 하기
+ErrorCode와 ResponseCode를 미리 선언하여 일관된 형식으로 값 받기
+
+프론트엔드와 백엔드의 역할을 확실하게 분리하기
+인증과 관련된 처리는 시큐리티를 통해 진행
+ 
+기능 및 진행 분기별로 Commit 진행
+PR 및 Commit 그리고 issue를 단계별로 분리하여 진행
+
+브렌치 규칙 및 PR 규칙 선정
+미리 정해둔 역할별로 브렌치 생성, Pull Request도 기능별로 Merge, Main 브렌치 보단 Dev 브렌치를 만들어 충돌 오류 방지</span><span class="v55_86">UUID를 사용하여 관리할 것인가?
+UUID의 장점
+사용자의 userID 노출을 막을 수 있다.
+UUID의 단점
+관련하여 코드를 더 생성해야 하며, 개발 시 프론트엔드측의 개발에 대한 개발 속도가  낮아질 것이라 예상</span><span class="v55_92">요구 사항 중에 Editor를 사용한 파일 첨부라는 요구가 있었다.
+CKEditor vs Summernote
+CKEditor
+에디터들 중 제일 기능이 많이 들어있으며 커스텀이 가능하다.
+첨부파일 기능에 대하여도 따로 분리가 가능하다.
+단점 개발이 조금 어렵다.
+Summernonte
+간단하게 개발할 수 있다.
+단점은 첨부파일을 넣는 과정에서의 용량적 한계를 느꼈었다.</span><span class="v55_102">/url 허용 문제
+Filter로 체이닝 진행 시 .requestMathcer에서 구분 진행. 어떤 권한도 없이 진행해야 할 경우 .permitAll()로 허용하고 그 외의 로그인 후에만 사용하고 싶은 링크는  .authenticated()로 인증된 정보 전달받은 이후 진행 
+세션에 로그인한 사용자의 정보가 없으니 아예 login 화면으로 튕기는 문제
+해당 문제를 해결하기 위해 Authentication을 사용하기로 결정. SecurityContext Holder를 사용하여 원활한 인증 진행</span><span class="v55_106">파일 다중 첨부 코드 진행 시 객체 형식이 맞지 않아 Controller, Service 등의 파일에서 문제 발생. 시간상의 이유로 1개의 파일만 첨부하는 코드로 변경</span><span class="v55_110">CKEditor 로딩이 되지 않으며 데이터 전달이 되지 않은 문제 발생</span><span class="v55_98">스프링 시큐리티</span><span class="v55_104">파일 다중 첨부 문제</span><span class="v55_108">CKEditor 문제</span><span class="v55_88">첨부파일 저장할 때 테이블을 분리 시킬 것인가?
+분리 시킬 시의 장점
+추후에 용량 관리 등 비용적 측면에서 따로 분리되었기에 file이란 테이블에서 수정 하기 용이하다고 판단했따.
+분리 시킬 시의 단점
+관련 코드 양이 늘며 개발 속도가 느려질 것이라 예상</span><span class="v55_72">🚩 하고자 했던 목표</span><span class="v55_78">🚩 실제로 진행한 점</span><span class="v55_84">데이테베이스 설계</span><span class="v55_90">화면 설계</span><span class="v55_20">language & framework</span><span class="v55_37">database</span><span class="v55_41">front-end</span><span class="v55_45">etc</span><span class="v55_43">Thymeleaf</span><span class="v55_47">Spring Security, Spring Data JPA, Lombok,
+Gradle - Groovy</span><span class="v55_39">H2 Database</span><span class="v55_35">java 17, Spring Boot 3.4.0</span><span class="v55_12">-</span><span class="v55_14">-</span><span class="v55_16">2024 동계 채용연계형 인턴쉽 코딩 테스트</span><div class="v55_52"></div></div></body></html>
