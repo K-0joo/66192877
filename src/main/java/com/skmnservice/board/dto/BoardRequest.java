@@ -6,7 +6,6 @@ public record BoardRequest(
         String title,
 
         UUID memberId,
-        String context,
-        boolean filePrecence
+        String context
 ) {
 }

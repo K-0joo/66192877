@@ -27,8 +27,9 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                        .requestMatchers("/", "/api/member/**", "/api/board", "/h2-console/**").permitAll()
+                        .requestMatchers("/", "/api/member/**", "/api/board", "/api/board/{boardId}", "/h2-console/**", "/api/board/search").permitAll()
                         .requestMatchers("/css/**", "/javascript/**", "/images/**", "/favicon.ico" ).permitAll()
+                        .requestMatchers("/api/board/edit/**", "/api/board/delete/**", "/api/board/write").authenticated()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .usernameParameter("id") // 기본 username을 id로 변경

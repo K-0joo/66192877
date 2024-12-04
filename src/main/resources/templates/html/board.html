@@ -6,6 +6,7 @@
     <link href="/css/board.css" rel="stylesheet" />
 </head>
 <body>
+<script src="/javascript/boardlist.jsjs" defer></script>
 <div style="text-align: right; margin-bottom: 20px;">
     <span th:if="${member != null}" style="margin-right: 10px;">
         반갑습니다, <span th:text="${member.username}"></span>님
@@ -23,18 +24,19 @@
 
 <!-- 검색 영역 -->
 <div>
-    <input type="text" placeholder="제목 또는 작성자로 검색해 주세요." style="width: 80%; padding: 8px;">
-    <button style="padding: 8px 15px; background-color: orange; color: white; border: none; cursor: pointer;">
+    <input id="searchKeyword" type="text" placeholder="제목 또는 작성자로 검색해 주세요." style="width: 80%; padding: 8px;">
+    <button style="padding: 8px 15px; background-color: orange; color: white; border: none; cursor: pointer;" type="submit" onclick="location.href='/api/board?keyword=' + document.getElementById('searchKeyword').value + '&page=1&size=10';">
         검색하기
     </button>
-</div>
-
-<!-- 글쓰기 버튼 -->
-<div style="text-align: right; margin-bottom: 20px;">
     <button th:if="${member != null}" onclick="location.href='/api/board/write'" style="padding: 10px; background-color: orange; color: white; border: none; cursor: pointer;">
         글쓰기
     </button>
 </div>
+
+<!--&lt;!&ndash; 글쓰기 버튼 &ndash;&gt;-->
+<!--<div style="text-align: right; margin-bottom: 20px;">-->
+<!--    -->
+<!--</div>-->
 
 <!-- 게시물 목록 -->
 <table>
@@ -50,15 +52,15 @@
     <tbody>
     <tr th:each="post : ${boardPage.content}">
         <td>
-            <a th:href="@{/post/{id}(id=${post.boardId})}" style="text-decoration: underline; color: black;">
-                <span th:text="${post.title}"></span>
+            <a th:href="@{'/api/board/' + ${post.boardId}}" style="text-decoration: underline; color: black;">
+                [[${post.title}]]
             </a>
         </td>
-        <td th:text="${post.author}"></td>
-        <td th:text="${#dates.format(post.boardCreatedTime, 'yyyy.MM.dd')}"></td>
-        <td th:text="${post.hits}"></td>
+        <td>[[${post.author}]]</td>
+        <td>[[${#temporals.format(post.boardCreatedTime, 'yyyy.MM.dd')}]]</td>
+        <td>[[${post.hits}]]</td>
         <td>
-            <span th:if="${post.filePrecence}" style="cursor: pointer;">📄</span>
+<!--            <span th:if="${post.filePrecence}" style="cursor: pointer;">📄</span>-->
         </td>
     </tr>
     </tbody>
@@ -66,9 +68,19 @@
 
 <!-- 페이지네이션 -->
 <div class="pagination">
-    <a th:if="${totalPages != null}" th:each="i : ${#numbers.sequence(1, totalPages)}"
+    <!-- 이전 페이지 버튼 -->
+    <a th:if="${currentPage > 1}"
+       th:href="@{/api/board(page=${currentPage - 1}, size=${size}, keyword=${keyword})}">&laquo;</a>
+
+    <!-- 페이지 번호 버튼 -->
+    <a th:each="i : ${#numbers.sequence(1, totalPages)}"
        th:classappend="${i == currentPage} ? 'active'"
-       th:href="@{/api/board?page=${i}}" th:text="${i}"></a>
+       th:href="@{/api/board(page=${i}, size=${size}, keyword=${keyword})}"
+       th:text="${i}"></a>
+
+    <!-- 다음 페이지 버튼 -->
+    <a th:if="${currentPage < totalPages}"
+       th:href="@{/api/board(page=${currentPage + 1}, size=${size}, keyword=${keyword})}">&raquo;</a>
     <span th:if="${totalPages == null}">페이지 정보가 없습니다.</span>
 </div>
 
