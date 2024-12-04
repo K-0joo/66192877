@@ -6,7 +6,6 @@ public record BoardResponse(
         String title,
 
         String author,
-        String context,
-        boolean filePrecence
+        String context
 ) {
 }

@@ -21,6 +21,10 @@ public enum ResponseCode {
     // Board
     BOARD_SUCCESS(200, "B001", "게시판 작성에 성공하였습니다."),
     BOARD_FAIL(200, "B002", "게시판 작성에 실패하였습니다."),
+
+    // File
+    FILE_SUCCESS(200, "F001", "파일 업로드에 성공하였습니다."),
+    FILE_FAIL(200, "F002", "파일 업로드에 실패아셨습니다")
     ;
 
     private final int status;
