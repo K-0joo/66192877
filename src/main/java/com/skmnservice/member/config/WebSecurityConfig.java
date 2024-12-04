@@ -29,7 +29,7 @@ public class WebSecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                         .requestMatchers("/", "/api/member/**", "/api/board", "/h2-console/**").permitAll()
                         .requestMatchers("/css/**", "/javascript/**", "/images/**", "/favicon.ico" ).permitAll()
-                        .requestMatchers("/api/board/write", "/api/board/edit", "/api/board/delete", "/api/board/upload").authenticated()
+                        .requestMatchers("/api/board/**").authenticated()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .usernameParameter("id") // 기본 username을 id로 변경

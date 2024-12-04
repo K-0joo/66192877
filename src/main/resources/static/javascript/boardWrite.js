@@ -1,37 +1,31 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // CKEditor 초기화
-    CKEDITOR.replace('context', {
-        language: 'ko',
-        toolbar: [
-            ['Bold', 'Italic', 'Underline', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Image', 'Table'],
-            ['FontSize', 'TextColor', 'BGColor', '-', 'Maximize', 'Source']
-        ]
-    });
+document.querySelector("form").addEventListener("submit", function (e) {
+    e.preventDefault(); // 기본 동작 방지
 
-    // Form 데이터와 파일 전송 처리
-    document.querySelector("form").addEventListener("submit", function (e) {
-        e.preventDefault();
+    const formData = new FormData(e.target);
 
-        const formData = new FormData(e.target);
-
-        fetch("/api/board/write", {
-            method: "POST",
-            body: formData,
+    fetch("/api/board/write", {
+        method: "POST",
+        body: formData,
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
         })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error("서버 응답 오류");
-                }
-            })
-            .then((data) => {
-                alert("게시글이 성공적으로 저장되었습니다!");
-                location.href = "/api/board";
-            })
-            .catch((err) => {
-                console.error("Error:", err);
-                alert("게시글 저장 중 오류 발생: " + err.message);
-            });
-    });
+        .then((data) => {
+            if (data.code === "BOARD_SUCCESS" && data.data.boardId) {
+                const boardId = data.data.boardId;
+                console.log(`게시글 작성 완료, boardId: ${boardId}`);
+                // 상세 페이지로 이동
+                location.href = `/api/board/${boardId}`;
+            } else {
+                console.error("응답 데이터 오류:", data);
+                alert(data.message || "게시글 작성에 실패했습니다.");
+            }
+        })
+        .catch((err) => {
+            console.error("에러 발생:", err);
+            alert("서버 요청 중 오류 발생: " + err.message);
+        });
 });

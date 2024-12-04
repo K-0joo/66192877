@@ -1,9 +1,11 @@
 package com.skmnservice.board.controller;
 
+import com.skmnservice.board.dto.BoardDetailResponse;
 import com.skmnservice.board.dto.BoardRequest;
 import com.skmnservice.board.dto.BoardResponse;
 import com.skmnservice.board.entity.Board;
 import com.skmnservice.board.service.BoardService;
+import com.skmnservice.global.error.ErrorCode;
 import com.skmnservice.global.error.exception.NotFoundException;
 import com.skmnservice.global.response.ResponseCode;
 import com.skmnservice.global.response.ResponseDto;
@@ -36,7 +38,7 @@ public class BoardAPIController {
                                              @RequestParam("context") String context) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
-            return ResponseEntity.status(401).body(ResponseDto.of(ResponseCode.LOGIN_FAIL, "로그인이 필요합니다."));
+            return ResponseEntity.status(401).body(ResponseDto.of(ResponseCode.NEED_AUTHORIZED, "로그인이 필요합니다."));
         }
 
         // Principal에서 ID 추출
@@ -102,7 +104,6 @@ public class BoardAPIController {
 
     @GetMapping("/write")
     public String boardDetail(Model model){
-
         // Spring Security에서 인증된 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()
@@ -119,12 +120,77 @@ public class BoardAPIController {
     @GetMapping("/{boardId}")
     public String getBoardDetail(@PathVariable UUID boardId, Model model) {
         try {
-            BoardResponse board = boardService.getBoardById(boardId);
+            BoardDetailResponse board = boardService.getBoardById(boardId);
             model.addAttribute("board", board);
         } catch (NotFoundException e) {
             return "error/404"; // 게시글이 없을 경우 404 페이지로 이동
         }
         return "html/boardDetail"; // 상세 페이지 HTML 파일
+    }
+
+    @DeleteMapping("/delete/{boardId}")
+    @ResponseBody
+    public ResponseEntity<ResponseDto> deleteBoard(@PathVariable UUID boardId) {
+        try {
+            // 현재 사용자 인증 정보 확인
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+                return ResponseEntity.status(401).body(ResponseDto.of(ResponseCode.NEED_AUTHORIZED));
+            }
+
+            // 인증된 사용자의 username 가져오기
+            String username = authentication.getName();
+
+            // username으로 Member 조회
+            Member member = memberRepository.findById(username)
+                    .orElseThrow(() -> new NotFoundException(ErrorCode.ACCOUNT_NOT_FOUND));
+
+            UUID memberId = member.getMemberId();
+
+            // 삭제 서비스 호출
+            boardService.deleteBoard(boardId, memberId);
+
+            return ResponseEntity.ok(ResponseDto.of(ResponseCode.BOARD_DELETE_SUCCESS, "게시글이 삭제되었습니다."));
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(404).body(ResponseDto.of(ResponseCode.BOARD_NOT_FOUND, "게시글을 찾을 수 없습니다."));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(ResponseDto.of(ResponseCode.BOARD_DELETE_FAIL));
+        }
+    }
+
+    @PutMapping("/update/{boardId}")
+    @ResponseBody
+    public ResponseEntity<ResponseDto> updateBoard(@PathVariable UUID boardId,
+                                                   @RequestBody BoardUpdateRequestDto updateRequest) {
+        try {
+            // 현재 사용자 인증 정보 확인
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+                return ResponseEntity.status(401).body(ResponseDto.of(ResponseCode.NEED_AUTHORIZED));
+            }
+
+            // 인증된 사용자의 username 가져오기
+            String username = authentication.getName();
+
+            // username으로 Member 조회
+            Member member = memberRepository.findById(username)
+                    .orElseThrow(() -> new NotFoundException(ErrorCode.ACCOUNT_NOT_FOUND));
+
+            UUID memberId = member.getMemberId();
+
+            // 수정 서비스 호출
+            boardService.updateBoard(boardId, memberId, updateRequest);
+
+            return ResponseEntity.ok(ResponseDto.of(ResponseCode.BOARD_EDIT_SUCCESS));
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(404).body(ResponseDto.of(ResponseCode.BOARD_NOT_FOUND, "게시글을 찾을 수 없습니다."));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(ResponseDto.of(ResponseCode.BOARD_UPDATE_FAIL));
+        }
     }
 
 }

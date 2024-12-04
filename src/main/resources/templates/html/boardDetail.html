@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세</title>
+</head>
+<body>
+<div>
+    <script src="/javascript/boardDetail.js" defer></script>
+    <h1 th:text="${board.title}"></h1>
+    <p>작성일자: <span th:text="${board.boardCreatedTime}"></span></p>
+    <p>조회수: <span th:text="${board.hits}"></span></p>
+    <p>작성자: <span th:text="${board.author}"></span></p>
+    <div th:text="${board.context}"></div>
+
+    <div>
+        <h4>첨부파일</h4>
+        <ul>
+<!--            <li th:each="file : ${board.files}">-->
+<!--                <a th:href="@{${file.url}}" th:text="${file.name}"></a>-->
+<!--            </li>-->
+        </ul>
+    </div>
+
+    <button onclick="location.href='/api/board'">뒤로가기</button>
+    <button onclick="location.href='/api/board/edit/${board.boardId}'">수정하기</button>
+    <button id="deleteButton" th:data-board-id="${board.boardId}">삭제하기</button>
+</div>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.skmnservice.board.service;
 
+import com.skmnservice.board.dto.BoardDetailResponse;
 import com.skmnservice.board.dto.BoardRequest;
 import com.skmnservice.board.dto.BoardResponse;
 import com.skmnservice.board.entity.Board;
@@ -75,4 +76,28 @@ public class BoardService {
             throw new RuntimeException("파일 저장 중 오류 발생" + e.getMessage(), e);
         }
     }
+
+    @Transactional
+    public BoardDetailResponse getBoardById(UUID boardId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.BOARD_NOT_FOUND));
+
+        return new BoardDetailResponse(board.getBoardId() ,board.getTitle(), board.getAuthor().getId(), board.getContext(), board.getHits(), board.getBoardCreatedTime());
+    }
+
+    @Transactional
+    public void deleteBoard(UUID boardId, UUID memberId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.BOARD_NOT_FOUND));
+
+        // 게시글 작성자 검증
+        if (!board.getAuthor().getMemberId().equals(memberId)) {
+            throw new IllegalArgumentException("게시글 삭제 권한이 없습니다.");
+        }
+
+        // 게시글 삭제
+        boardRepository.delete(board);
+    }
+
+
 }
