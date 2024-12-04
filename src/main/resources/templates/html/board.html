@@ -27,14 +27,15 @@
     <button style="padding: 8px 15px; background-color: orange; color: white; border: none; cursor: pointer;">
         검색하기
     </button>
-</div>
-
-<!-- 글쓰기 버튼 -->
-<div style="text-align: right; margin-bottom: 20px;">
     <button th:if="${member != null}" onclick="location.href='/api/board/write'" style="padding: 10px; background-color: orange; color: white; border: none; cursor: pointer;">
         글쓰기
     </button>
 </div>
+
+<!--&lt;!&ndash; 글쓰기 버튼 &ndash;&gt;-->
+<!--<div style="text-align: right; margin-bottom: 20px;">-->
+<!--    -->
+<!--</div>-->
 
 <!-- 게시물 목록 -->
 <table>
@@ -55,7 +56,7 @@
             </a>
         </td>
         <td th:text="${post.author}"></td>
-        <td th:text="${#dates.format(post.boardCreatedTime, 'yyyy.MM.dd')}"></td>
+        <td th:text="${#temporals.format(post.boardCreatedTime, 'yyyy.MM.dd')}"></td>
         <td th:text="${post.hits}"></td>
         <td>
             <span th:if="${post.filePrecence}" style="cursor: pointer;">📄</span>
@@ -66,9 +67,19 @@
 
 <!-- 페이지네이션 -->
 <div class="pagination">
-    <a th:if="${totalPages != null}" th:each="i : ${#numbers.sequence(1, totalPages)}"
+    <!-- 이전 페이지 버튼 -->
+    <a th:if="${currentPage > 1}"
+       th:href="@{/api/board(page=${currentPage - 1}, size=${size}, keyword=${keyword})}">&laquo;</a>
+
+    <!-- 페이지 번호 버튼 -->
+    <a th:each="i : ${#numbers.sequence(1, totalPages)}"
        th:classappend="${i == currentPage} ? 'active'"
-       th:href="@{/api/board?page=${i}}" th:text="${i}"></a>
+       th:href="@{/api/board(page=${i}, size=${size}, keyword=${keyword})}"
+       th:text="${i}"></a>
+
+    <!-- 다음 페이지 버튼 -->
+    <a th:if="${currentPage < totalPages}"
+       th:href="@{/api/board(page=${currentPage + 1}, size=${size}, keyword=${keyword})}">&raquo;</a>
     <span th:if="${totalPages == null}">페이지 정보가 없습니다.</span>
 </div>
 

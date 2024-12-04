@@ -57,10 +57,18 @@ public class BoardService {
     }
 
     @Transactional
-    public Page<Board> getBoardList(int page, int size, String keyword){
+    public Page<Board> getBoardList(int page, int size, String keyword) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by("boardCreatedTime").descending());
+
+        // keyword가 비어 있으면 전체 데이터 반환
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return boardRepository.findAll(pageable);
+        }
+
+        // keyword가 있으면 검색 결과 반환
         return boardRepository.findByTitleOrAuthorId(keyword, keyword, pageable);
     }
+
 
     @Transactional
     public String saveFile(MultipartFile file) {

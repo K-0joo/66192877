@@ -74,10 +74,17 @@ public class BoardAPIController {
     }
 
     @GetMapping
-    public String boardList(@RequestParam(defaultValue = "0") int page,
+    public String boardList(@RequestParam(defaultValue = "1") int page,
                             @RequestParam(defaultValue = "10") int size,
                             @RequestParam(defaultValue = "") String keyword,
                             Model model){
+
+        // 사용자 입력 페이지 번호를 0부터 시작하도록 변환
+        int zeroBasedPage = page - 1;
+
+        if (zeroBasedPage < 0) { // 음수 방어
+            zeroBasedPage = 0;
+        }
 
         // Spring Security에서 인증된 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -86,11 +93,11 @@ public class BoardAPIController {
             model.addAttribute("member", authentication.getPrincipal());
         } else {
             model.addAttribute("member", null);
-            return "redirect:/api/member/login";
         }
 
         try {
             Page<Board> boardPage = boardService.getBoardList(page, size, keyword);
+            System.out.println("Board page content: " + boardPage.getContent()); // 확인용 로그
             model.addAttribute("boardPage", boardPage);
             model.addAttribute("currentPage", page);
             model.addAttribute("keyword", keyword);   // totalPages를 Model에 추가
@@ -120,6 +127,16 @@ public class BoardAPIController {
 
     @GetMapping("/{boardId}")
     public String getBoardDetail(@PathVariable UUID boardId, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 로그인된 경우 사용자 정보 전달
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            model.addAttribute("member", authentication.getPrincipal());
+        } else {
+            model.addAttribute("member", null);
+        }
+
         try {
             BoardDetailResponse board = boardService.getBoardById(boardId);
             model.addAttribute("board", board);
