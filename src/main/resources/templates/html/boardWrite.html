@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>글쓰기</title>
+<!--    <link href="/css/style.css" rel="stylesheet" />-->
+    <script src="/javascript/boardWrite.js"></script>
+</head>
+<body>
+<div>
+    <script src="https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js"></script>
+    <h1>게시글 작성</h1>
+    <form th:action="@{/api/board/write}" method="post" enctype="multipart/form-data">
+        <!-- 제목 -->
+        <div>
+            <label for="title">게시글 제목</label>
+            <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
+        </div>
+
+        <!-- 작성자 -->
+        <div>
+            <label for="author">작성자</label>
+            <input type="text" id="author" name="author" th:value="${member.username}" readonly>
+        </div>
+
+        <!-- 내용 -->
+        <div>
+            <label for="context">작성내용</label>
+            <textarea id="context" name="context" rows="10" placeholder="내용을 입력하세요" required></textarea>
+        </div>
+
+        <!-- 파일 첨부 -->
+        <div>
+            <label for="file">첨부파일</label>
+            <input type="file" id="file" name="file">
+        </div>
+
+        <!-- 버튼 -->
+        <div>
+            <button type="submit" class="btn btn-primary">저장하기</button>
+            <button type="button" onclick="location.href='/api/board'">뒤로가기</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

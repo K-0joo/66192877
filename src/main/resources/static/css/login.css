@@ -1,0 +1,107 @@
+/* 전체 페이지 */
+body {
+    margin: 0;
+    font-family: 'Moebius Korea', sans-serif;
+    background: #FFFFFF;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* 메인 컨테이너 */
+.login-page {
+    position: relative;
+    width: 1440px;
+    height: 1024px;
+    margin: 0 auto;
+}
+
+/* 다각형 */
+.polygon {
+    position: absolute;
+    width: 676.12px;
+    height: 358.5px;
+    border-radius: 10px;
+}
+
+.polygon1 {
+    left: 1302px;
+    top: 624.59px;
+    background: #FF7A00;
+    transform: rotate(128.79deg);
+}
+
+.polygon2 {
+    left: calc(50% - 676.12px / 2 - 243.94px);
+    top: calc(50% - 358.5px / 2 + 67.25px);
+    background: #EA0000;
+    transform: rotate(-51.21deg);
+}
+
+/* 로그인 컨테이너 */
+.login-container {
+    position: absolute;
+    width: 606px;
+    height: 748px;
+    left: 417px;
+    top: 140px;
+    background: #F9F9F9;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+/* 로그인 제목 */
+.login-title {
+    font-size: 48px;
+    font-weight: 500;
+    color: #000;
+    margin: 40px 0;
+}
+
+/* 입력 그룹 */
+.input-group {
+    width: 408px;
+    margin: 20px 0;
+}
+
+.input-label {
+    display: block;
+    font-size: 36px;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    height: 82px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    border: none;
+    padding: 0 10px;
+    font-size: 18px;
+}
+
+/* 로그인 버튼 */
+.login-button {
+    width: 513px;
+    height: 82px;
+    background: #FFE193;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    border: none;
+    font-size: 28px;
+    font-weight: 400;
+    color: #000;
+    cursor: pointer;
+    margin-top: 30px;
+}
+
+.login-button:hover {
+    background: #FFCC66;
+}
