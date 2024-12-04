@@ -1,3 +1,12 @@
+// 수정하기 버튼 클릭 시
+const editButton = document.getElementById("editButton");
+if (editButton) {
+    editButton.addEventListener("click", function () {
+        const boardId = editButton.getAttribute("data-board-id");
+        location.href = `/api/board/edit/${boardId}`; // 수정 페이지로 이동
+    });
+}
+
 document.getElementById("deleteButton").addEventListener("click", function () {
     const boardId = this.getAttribute("data-board-id");
 

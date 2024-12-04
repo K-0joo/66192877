@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 수정</title>
+    <link href="/css/board.css" rel="stylesheet" />
+</head>
+<body>
+<script src="/javascript/boardEdit.js" defer></script>
+<div style="text-align: center; margin-top: 50px;">
+    <h1>게시글 수정</h1>
+    <form id="editForm">
+        <input type="hidden" id="boardId" th:value="${board.boardId}" />
+        <div>
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" th:value="${board.title}" required />
+        </div>
+        <div>
+            <label for="context">내용</label>
+            <textarea id="context" name="context" rows="10" required th:text="${board.context}"></textarea>
+        </div>
+        <button type="submit" style="padding: 10px; background-color: orange; color: white; border: none; cursor: pointer;">수정하기</button>
+        <button type="button" onclick="location.href='/api/board/${board.boardId}'" style="padding: 10px; background-color: gray; color: white; border: none; cursor: pointer;">취소</button>
+    </form>
+</div>
+<script src="/javascript/boardEdit.js" defer></script>
+</body>
+</html>

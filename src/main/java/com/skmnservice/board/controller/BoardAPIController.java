@@ -1,6 +1,7 @@
 package com.skmnservice.board.controller;
 
 import com.skmnservice.board.dto.BoardDetailResponse;
+import com.skmnservice.board.dto.BoardEditRequest;
 import com.skmnservice.board.dto.BoardRequest;
 import com.skmnservice.board.dto.BoardResponse;
 import com.skmnservice.board.entity.Board;
@@ -128,6 +129,13 @@ public class BoardAPIController {
         return "html/boardDetail"; // 상세 페이지 HTML 파일
     }
 
+    @GetMapping("/edit/{boardId}")
+    public String editBoard(@PathVariable UUID boardId, Model model) {
+        BoardDetailResponse board = boardService.getBoardById(boardId);
+        model.addAttribute("board", board);
+        return "html/boardEdit"; // 수정 페이지로 이동
+    }
+
     @DeleteMapping("/delete/{boardId}")
     @ResponseBody
     public ResponseEntity<ResponseDto> deleteBoard(@PathVariable UUID boardId) {
@@ -160,10 +168,10 @@ public class BoardAPIController {
         }
     }
 
-    @PutMapping("/update/{boardId}")
+    @PutMapping("/edit/{boardId}")
     @ResponseBody
     public ResponseEntity<ResponseDto> updateBoard(@PathVariable UUID boardId,
-                                                   @RequestBody BoardUpdateRequestDto updateRequest) {
+                                                   @RequestBody BoardEditRequest editRequest) {
         try {
             // 현재 사용자 인증 정보 확인
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -182,14 +190,14 @@ public class BoardAPIController {
             UUID memberId = member.getMemberId();
 
             // 수정 서비스 호출
-            boardService.updateBoard(boardId, memberId, updateRequest);
+            boardService.editBoard(boardId, memberId, editRequest);
 
             return ResponseEntity.ok(ResponseDto.of(ResponseCode.BOARD_EDIT_SUCCESS));
         } catch (NotFoundException e) {
             return ResponseEntity.status(404).body(ResponseDto.of(ResponseCode.BOARD_NOT_FOUND, "게시글을 찾을 수 없습니다."));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body(ResponseDto.of(ResponseCode.BOARD_UPDATE_FAIL));
+            return ResponseEntity.status(500).body(ResponseDto.of(ResponseCode.BOARD_EDIT_FAIL));
         }
     }
 

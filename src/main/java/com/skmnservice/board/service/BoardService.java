@@ -1,6 +1,7 @@
 package com.skmnservice.board.service;
 
 import com.skmnservice.board.dto.BoardDetailResponse;
+import com.skmnservice.board.dto.BoardEditRequest;
 import com.skmnservice.board.dto.BoardRequest;
 import com.skmnservice.board.dto.BoardResponse;
 import com.skmnservice.board.entity.Board;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -99,5 +101,21 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
+    public void editBoard(UUID boardId, UUID memberId, BoardEditRequest editRequest) {
+        // 게시글 조회
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.BOARD_NOT_FOUND));
 
+        // 게시글 작성자 검증
+        if (!board.getAuthor().getMemberId().equals(memberId)) {
+            throw new AccessDeniedException("게시글 수정 권한이 없습니다.");
+        }
+
+        // 게시글 내용 수정
+        board.setTitle(editRequest.title());
+        board.setContext(editRequest.context());
+
+        // 게시글 저장
+        boardRepository.save(board);
+    }
 }

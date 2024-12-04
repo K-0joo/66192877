@@ -25,7 +25,7 @@ public enum ResponseCode {
     BOARD_NOT_FOUND(200, "B003", "해당하는 게시판이 없습니다."),
     BOARD_DELETE_SUCCESS(200, "B004", "게시판 삭제에 성공하였습니다."),
     BOARD_DELETE_FAIL(200, "B005", "게시판 삭제에 실패하였습니다."),
-    BOARD_EDIT_SUCCES(200, "B006", "게시판 수정에 성공하였습니다."),
+    BOARD_EDIT_SUCCESS(200, "B006", "게시판 수정에 성공하였습니다."),
     BOARD_EDIT_FAIL(200, "B007", "게시판 수정에 실패하였습니다."),
 
     // File
