@@ -14,6 +14,7 @@ import com.skmnservice.member.entity.Member;
 import com.skmnservice.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -82,11 +83,7 @@ public class BoardAPIController {
                             Model model){
 
         // 사용자 입력 페이지 번호를 0부터 시작하도록 변환
-        int zeroBasedPage = page - 1;
-
-        if (zeroBasedPage < 0) { // 음수 방어
-            zeroBasedPage = 0;
-        }
+        int zeroBasedPage = Math.max(page - 1, 0);
 
         // Spring Security에서 인증된 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -97,20 +94,25 @@ public class BoardAPIController {
             model.addAttribute("member", null);
         }
 
-        try {
-            Page<Board> boardPage = boardService.getBoardList(page, size, keyword);
-            System.out.println("Board page content: " + boardPage.getContent()); // 확인용 로그
-            model.addAttribute("boardPage", boardPage);
-            model.addAttribute("currentPage", page);
-            model.addAttribute("keyword", keyword);   // totalPages를 Model에 추가
-            model.addAttribute("totalPages", boardPage.getTotalPages());
-        } catch (Exception e) {
-            e.printStackTrace(); // 예외 로그 출력
-            return "error/500"; // 오류 페이지로 리다이렉트
-        }
+
+        Page<BoardResponse> boardPage = boardService.getBoardList(zeroBasedPage, size, keyword);
+        model.addAttribute("boardPage", boardPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("keyword", keyword);   // totalPages를 Model에 추가
+        model.addAttribute("totalPages", boardPage.getTotalPages());
+
 
         return "html/board";
     }
+
+    @RequestMapping("/search")
+    public String searchBoard(@RequestParam(defaultValue = "") String keyword,
+                              @RequestParam(defaultValue = "1") int page,
+                              @RequestParam(defaultValue = "10") int size,
+                              Model model) {
+        return boardList(page, size, keyword, model);
+    }
+
 
     @GetMapping("/write")
     public String boardDetail(Model model){

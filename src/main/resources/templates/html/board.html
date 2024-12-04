@@ -6,6 +6,7 @@
     <link href="/css/board.css" rel="stylesheet" />
 </head>
 <body>
+<script src="/javascript/boardlist.jsjs" defer></script>
 <div style="text-align: right; margin-bottom: 20px;">
     <span th:if="${member != null}" style="margin-right: 10px;">
         반갑습니다, <span th:text="${member.username}"></span>님
@@ -23,8 +24,8 @@
 
 <!-- 검색 영역 -->
 <div>
-    <input type="text" placeholder="제목 또는 작성자로 검색해 주세요." style="width: 80%; padding: 8px;">
-    <button style="padding: 8px 15px; background-color: orange; color: white; border: none; cursor: pointer;">
+    <input id="searchKeyword" type="text" placeholder="제목 또는 작성자로 검색해 주세요." style="width: 80%; padding: 8px;">
+    <button style="padding: 8px 15px; background-color: orange; color: white; border: none; cursor: pointer;" type="submit" onclick="location.href='/api/board?keyword=' + document.getElementById('searchKeyword').value + '&page=1&size=10';">
         검색하기
     </button>
     <button th:if="${member != null}" onclick="location.href='/api/board/write'" style="padding: 10px; background-color: orange; color: white; border: none; cursor: pointer;">
@@ -51,15 +52,15 @@
     <tbody>
     <tr th:each="post : ${boardPage.content}">
         <td>
-            <a th:href="@{/api/board/{boardId}(boardId=${post.boardId})}" style="text-decoration: underline; color: black;">
-                <span th:text="${post.title}"></span>
+            <a th:href="@{'/api/board/' + ${post.boardId}}" style="text-decoration: underline; color: black;">
+                [[${post.title}]]
             </a>
         </td>
-        <td th:text="${post.author}"></td>
-        <td th:text="${#temporals.format(post.boardCreatedTime, 'yyyy.MM.dd')}"></td>
-        <td th:text="${post.hits}"></td>
+        <td>[[${post.author}]]</td>
+        <td>[[${#temporals.format(post.boardCreatedTime, 'yyyy.MM.dd')}]]</td>
+        <td>[[${post.hits}]]</td>
         <td>
-            <span th:if="${post.filePrecence}" style="cursor: pointer;">📄</span>
+<!--            <span th:if="${post.filePrecence}" style="cursor: pointer;">📄</span>-->
         </td>
     </tr>
     </tbody>

@@ -5,8 +5,9 @@
     <title>게시글 상세</title>
 </head>
 <body>
+<script src="/javascript/boardDetail.js" defer></script>
 <div>
-    <script src="/javascript/boardDetail.js" defer></script>
+
     <h1 th:text="${board.title}"></h1>
     <p>작성일자: <span th:text="${board.boardCreatedTime}"></span></p>
     <p>조회수: <span th:text="${board.hits}"></span></p>
